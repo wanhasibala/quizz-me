@@ -1,8 +1,7 @@
 # Quizz Me
-Quizz Me is a mobile app built with React Native that allows users to take quizzes on various topics. It is designed with a clean UI, including functional components, navigation between different quiz topics, and task tracking capabilities to keep users engaged. This app uses Expo Router for navigation and provides toast notifications to improve the user experience.
+Quizz Me is a mobile app built with React Native that allows users to create todo list for daily activity. It is designed with a clean UI, and task tracking capabilities to keep users engaged. This app uses Expo Router for navigation and provides toast notifications to improve the user experience.
 
 # Features
-Quiz Topics: Browse through various quiz topics to test your knowledge.
 Daily and Monthly Tasks: Track daily and monthly tasks with a custom Todo List.
 Toast Notifications: Receive feedback with toast messages for actions like creating, completing, or deleting tasks.
 Swipe to Delete: Easily delete tasks by swiping them away.
