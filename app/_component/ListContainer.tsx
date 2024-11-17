@@ -1,3 +1,4 @@
+import * as Notifications from "expo-notifications";
 import React, { useEffect } from "react";
 import {
   View,
@@ -17,6 +18,7 @@ interface Todo {
   date: string;
   time: string;
   completed: boolean;
+  notificationId?: string;
 }
 
 interface ListContainerProps {
@@ -55,6 +57,11 @@ const ListContainer: React.FC<ListContainerProps> = ({
   };
 
   const deleteTodo = (id: number) => {
+    const deleteNotification = todos.find((todo) => todo.id === id);
+    Notifications.cancelScheduledNotificationAsync(
+      //@ts-ignore
+      deleteNotification?.notificationId,
+    );
     const updatedTodos = todos.filter((todo) => todo.id !== id);
     saveTodos(updatedTodos);
     Toast.show({
@@ -65,21 +72,30 @@ const ListContainer: React.FC<ListContainerProps> = ({
 
   const toggleComplete = (id: number) => {
     const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      todo.id === id
+        ? {
+            ...todo,
+            completed: !todo.completed,
+          }
+        : todo,
     );
-    saveTodos(updatedTodos);
+
     const todo = updatedTodos.find((todo) => todo.id === id);
+    if (todo?.completed && todo?.notificationId) {
+      Notifications.cancelScheduledNotificationAsync(todo.notificationId);
+    }
+
+    saveTodos(updatedTodos);
     Toast.show({
       type: "updateToast",
       text1: todo?.completed ? "Task Completed" : "Task Uncompleted",
-      // text2: `The task "${todo?.title}" has been ${
-      //   todo?.completed ? "marked as completed." : "marked as uncompleted."
-      // }`,
     });
   };
 
   const renderRightActions = (
+    //@ts-ignore
     progress: Animated.AnimatedInterpolation,
+    //@ts-ignore
     dragX: Animated.AnimatedInterpolation,
     itemId: number,
   ) => {

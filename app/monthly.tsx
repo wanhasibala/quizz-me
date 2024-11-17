@@ -36,10 +36,13 @@ export default function Monthly() {
 
   const getMarkedDates = (): { [date: string]: MarkedDate } => {
     const marks: { [date: string]: MarkedDate } = {};
+
     todos.forEach((task) => {
       if (marks[task.date]) {
+        // If there are already tasks on this date, increase the count
         marks[task.date].dots?.push({ color: "#5c7cfa" });
       } else {
+        // Initialize the date with a single dot
         marks[task.date] = {
           dots: [{ color: "#5c7cfa" }],
           marked: true,
@@ -47,6 +50,24 @@ export default function Monthly() {
       }
     });
 
+    Object.keys(marks).forEach((date) => {
+      if (marks[date].dots && marks[date].dots.length > 1) {
+        // More than one task: Show a red circle with the task count
+        marks[date].dots = [
+          { color: "#5c7cfa" }, // Default dot color
+        ];
+        marks[date].customStyles = {
+          container: {
+            position: "relative",
+          },
+          text: {
+            color: "black",
+          },
+        };
+      }
+    });
+
+    // Highlight selected date
     if (selectedDate) {
       marks[selectedDate] = {
         ...marks[selectedDate],
@@ -58,21 +79,17 @@ export default function Monthly() {
     return marks;
   };
 
-  const addTodo = (title: string) => {
+  const addTodo = (title: string, time: string | null) => {
     if (!title) return; // Only check if the title is provided
-    console.log(title);
     const now = new Date();
     const date = now.toISOString().split("T")[0]; // Format as YYYY-MM-DD
-    const time = now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    }); // Format as hh:mm AM/PM
+    console.log(time);
 
     const newTodo: Todo = {
       id: Date.now(),
       title,
       date: selectedDate ? selectedDate : date,
-      time,
+      time: time ? time : Date.now().toLocaleString(),
       completed: false,
     };
     const updatedTodos = [...todos, newTodo];
@@ -90,7 +107,6 @@ export default function Monthly() {
       await AsyncStorage.setItem("todos", JSON.stringify(todos));
     } catch (e) {
       console.error(e);
-      console.log("todos");
     }
   };
 
@@ -119,6 +135,31 @@ export default function Monthly() {
             selectedDayBackgroundColor: "#5c7cfa",
             todayTextColor: "#5c7cfa",
             arrowColor: "#5c7cfa",
+          }}
+          renderDay={(date: any, item: any) => {
+            const hasMultipleTasks = item?.dots && item.dots.length > 1;
+            return (
+              <View style={{ position: "relative" }}>
+                <Text>{date.day}</Text>
+                {hasMultipleTasks && (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      backgroundColor: "red",
+                      borderRadius: 10,
+                      paddingHorizontal: 5,
+                      paddingVertical: 2,
+                    }}
+                  >
+                    <Text style={{ color: "white", fontSize: 10 }}>
+                      {item.dots.length}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            );
           }}
         />
 

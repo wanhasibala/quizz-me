@@ -7,11 +7,12 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 interface AddTaskModalProps {
   visible: boolean;
   onClose: () => void;
-  onAddTask: (title: string) => void;
+  onAddTask: (title: string, time: string | null) => void;
 }
 
 const AddTaskModal: React.FC<AddTaskModalProps> = ({
@@ -20,13 +21,33 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
   onAddTask,
 }) => {
   const [taskTitle, setTaskTitle] = useState("");
+  const [deadlineTime, setDeadlineTime] = useState<string | null>(null);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
 
   const handleSave = () => {
     if (taskTitle.trim()) {
-      onAddTask(taskTitle);
+      onAddTask(taskTitle, deadlineTime);
       setTaskTitle("");
+      setDeadlineTime(null);
       onClose();
     }
+  };
+
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);
+  };
+
+  const hideTimePicker = () => {
+    setTimePickerVisibility(false);
+  };
+
+  const handleConfirmTime = (time: Date) => {
+    const formattedTime = time.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    setDeadlineTime(formattedTime);
+    hideTimePicker();
   };
 
   return (
@@ -45,6 +66,19 @@ const AddTaskModal: React.FC<AddTaskModalProps> = ({
             value={taskTitle}
             onChangeText={setTaskTitle}
           />
+
+          <Text style={styles.label}>Deadline Time:</Text>
+          <TouchableOpacity style={styles.timeButton} onPress={showTimePicker}>
+            <Text style={styles.timeText}>{deadlineTime || "Select Time"}</Text>
+          </TouchableOpacity>
+
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            onConfirm={handleConfirmTime}
+            onCancel={hideTimePicker}
+          />
+
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.buttonText}>Add Task</Text>
           </TouchableOpacity>
@@ -83,6 +117,23 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 10,
     borderRadius: 5,
+  },
+  label: {
+    fontSize: 16,
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  timeButton: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  timeText: {
+    fontSize: 16,
+    color: "#333",
   },
   saveButton: {
     backgroundColor: "#5c7cfa",

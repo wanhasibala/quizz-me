@@ -1,4 +1,5 @@
 // your-project/app/_layout.js
+import * as Notification from "expo-notifications";
 import { Tabs, useRouter } from "expo-router";
 import {
   View,
@@ -7,7 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Monthly from "./monthly";
 import Daily from "./daily";
 import "../global.css";
@@ -18,7 +19,16 @@ import { toastConfig } from "./config/toast_config";
 export default function Layout() {
   const router = useRouter();
   const [selectedTab, setSelectedTab] = useState("monthly");
+  useEffect(() => {
+    const requestPermissions = async () => {
+      const { status } = await Notification.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission for notifications is required to receive reminders.");
+      }
+    };
 
+    requestPermissions();
+  }, []);
   // Function to navigate between tabs
   const handleTabPress = (tab: any) => {
     setSelectedTab(tab);
@@ -62,6 +72,7 @@ export default function Layout() {
         {/*   <Tabs.Screen name="daily" options={{ headerShown: false }} /> */}
         {/* </Tabs> */}
         {/* Custom Header Tab */}
+        {/*  @ts-ignore*/}
         <Toast config={toastConfig} />
       </SafeAreaView>
     </GestureHandlerRootView>
