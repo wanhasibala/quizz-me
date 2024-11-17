@@ -1,50 +1,58 @@
-# Welcome to your Expo app 👋
+# Quizz Me
+Quizz Me is a mobile app built with React Native that allows users to create todo list for daily activity. It is designed with a clean UI, and task tracking capabilities to keep users engaged. This app uses Expo Router for navigation and provides toast notifications to improve the user experience.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# Features
+Daily and Monthly Tasks: Track daily and monthly tasks with a custom Todo List.
+Toast Notifications: Receive feedback with toast messages for actions like creating, completing, or deleting tasks.
+Swipe to Delete: Easily delete tasks by swiping them away.
+Local Storage: Tasks are saved using AsyncStorage to retain data across sessions.
+Installation
+Clone the repository:
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
+  ```bash
+        git clone https://github.com/yourusername/quizz-me.git
+        cd quizz-me
    ```
 
-2. Start the app
-
-   ```bash
-    npx expo start
+# Install dependencies using Expo:
+  ```bash
+        expo install
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+# Start the Expo development server:
 
 ```bash
-npm run reset-project
+expo start
 ```
+Use the QR code or emulator to open the app on your mobile device.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+# Usage
+Monthly Page: Create and manage todo list by date of the month
+Daily Page: Create and manage todo list by today
+Task Management: Use the Todo List to add, complete, or delete tasks.
+Press the Add Task button to create a new task.
+Swipe left on a task to delete it.
+Tap on a task to toggle its completion status.
+Toast Notifications: Toasts will appear for task actions such as task creation, completion, or deletion.
 
-## Learn more
+# Components
+App.tsx: The root component that sets up the navigation and toast provider.
+Daily.tsx: Shows daily tasks and filters tasks to those due today.
+Monthly.tsx: Displays monthly tasks and allows users to select specific dates.
+ListContainer.tsx: Renders the list of tasks and includes swipe-to-delete functionality.
+AddTaskModal.tsx: A modal component to add new tasks with custom input fields.
 
-To learn more about developing your project with Expo, look at the following resources:
+# Dependencies
+React Native
+Expo
+React Navigation
+React Native Toast Message
+React Native Gesture Handler
+AsyncStorage
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+# Customization
+Customize toast messages in ListContainer.tsx for different task actions.
+Update colors, fonts, or styles in the various components under the styles object.
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# License
+This project is licensed under the MIT License.
